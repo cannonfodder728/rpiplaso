@@ -1,0 +1,30 @@
+FROM raspbian/stretch
+
+RUN apt-get -y update
+RUN apt-get -y install software-properties-common apt-transport-https
+RUN apt-get install -y liblzma-dev
+
+RUN apt-get -y update
+RUN apt-get -y upgrade
+RUN apt-get -y install python
+RUN apt-get -y install python-dev
+RUN apt-get -y install python-pip
+RUN apt-get -y remove python-pip python3-pip
+RUN wget https://bootstrap.pypa.io/get-pip.py
+RUN python get-pip.py
+
+RUN wget https://raw.githubusercontent.com/log2timeline/plaso/master/requirements.txt
+RUN pip install --upgrade setuptools
+RUN pip install -r requirements.txt
+RUN apt-get -y install python-construct
+RUN apt-get -y install python-crypto
+RUN pip install pylzma
+
+RUN pip install plaso
+
+RUN apt-get -y install git
+
+RUN git clone https://github.com/log2timeline/plaso
+RUN cp -r plaso/plaso/parsers/* /usr/local/lib/python2.7/dist-packages/plaso/parsers/                                                            sers/
+RUN rm -rf plaso
+RUN apt -y autoremove
